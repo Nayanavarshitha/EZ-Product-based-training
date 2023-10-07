@@ -1,87 +1,34 @@
-magic square matrix conditions:-
-1. All numbers used in the square must be distinct positive integers from 1 to n^2, where n is the number of rows (or columns) in the square.
-2. The sum of each row, column, and diagonal in the square must be the same, which is called the "magic sum" or "magic constant."
-3. The sum of the integers from 1 to n^2 must be evenly divisible by n. This ensures that a magic square can be constructed.
-4. There are different methods and algorithms for creating magic squares depending on whether n is odd or even. Odd-order magic squares (e.g., 3x3, 5x5, 7x7) are typically easier to construct than even-order magic squares (e.g., 4x4, 6x6).
-5. Magic squares can be rotated or reflected and still maintain their magic properties. In other words, there are multiple ways to arrange the numbers within a magic square that will yield the same magic sum.
-6. Magic squares have been studied for centuries, and there are different algorithms and mathematical properties associated with them. Some famous magic squares include the Lo Shu Square (a 3x3 magic square) and the Dürer's Magic Square (a 4x4 magic square).
+question:-
+write code to print 3*3 matrix where from every row and every column sum should be  same.
 
+def generate_magic_square(n):
+    magic_square = [[0] * n for _ in range(n)]
 
+    i, j = 0, n // 2
+    num = 1
 
-parentheses:-
-1. Round: ( ) - Encloses information or clarifications.
-2. Square: [ ] - Often used for comments or additional data.
-3. Curly: { } - Used in programming for code blocks.
-4. Angle: < > - Less common, used for various purposes.
-we need to be push when any paraenthese is there in stack
+    while num <= n * n:
+        magic_square[i][j] = num
+        num += 1
+        newi, newj = (i - 1) % n, (j + 1) % n
+        if magic_square[newi][newj]:
+            i = (i + 1) % n
+        else:
+            i, j = newi, newj
 
-conditions:-
-1)push 
-2)count (even)
-3)no counting(fail)
-4)close
- 
-code:-
+    return magic_square
 
-def generate_parentheses(n):
-    def backtrack(s, left, right):
-        if len(s) == 2 * n:
-            valid_parentheses.append(s)
-            return
-        if left < n:
-            backtrack(s + "(", left + 1, right)
-        if right < left:
-            backtrack(s + ")", left, right + 1)
-    valid_parentheses = []
-    backtrack(" ", 0, 0)
-    return valid_parentheses
+def print_matrix(matrix):
+    for row in matrix:
+        print(" ".join(map(str, row)))
+
 n = 3  
-result = generate_parentheses(n) 
-print(result)                                                                                                       
+magic_square = generate_magic_square(n)
+print_matrix(magic_square)
+
+ output: 
+8 1 6
+3 5 7
+4 9 2
 
 
-N-queen problem:-
-
- def is_valid(board, row, col, n):
-    for i in range(col):# check horizontal
-        if board[row][i] == 1:
-            return False
-    i = row
-    j = col
-    while i>=0 and j >= 0: # upper left diag
-        if board[i][j] == 1:
-            return False
-        i -= 1 
-        j -= 1 
-    i = row
-    j = col
-    while i<n and j >=0: #bottom left diag
-        if board[i][j] == 1:
-            return False
-        i += 1 
-        j -= 1
-        
-    return True
-def solve(n):
-    board = [[0 for i in range(n)] for j in range(n)]
-    def backtrack(col):
-        if col == n:
-            return True
-        for i in range(n):
-            if is_valid(board, i, col, n):
-                board[i][col] = 1
-                
-                if backtrack(col+1):
-                    return True
-                
-                board[i][col] = 0
-        
-        return False
-    
-    if backtrack(0):
-        for row in board:
-            print(row)
-    else:
-        print("no solution")
-n = 5
-solve(n)
